@@ -14,7 +14,7 @@
     "lib"
   ],
   "publishConfig": {
-    "registry": "http://registry.npm.taobao.org/"
+    "registry": "http://registry.npmjs.com/"
   },
   "repository": {
     "type": "git",
@@ -25,5 +25,11 @@
   },
   "bugs": {
     "url": "https://github.com/mugglecloud/web/issues"
+  },
+  "dependencies": {
+    "overmind": "^23.0.1",
+    "overmind-react": "^24.0.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
   }
 }
