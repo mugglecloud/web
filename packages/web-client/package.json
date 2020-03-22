@@ -1,0 +1,29 @@
+{
+  "name": "@mugglecloud/web-client",
+  "version": "1.0.0",
+  "description": "> TODO: description",
+  "author": "mugglecloud <mugglecloud@163.com>",
+  "homepage": "https://github.com/mugglecloud/web#readme",
+  "license": "ISC",
+  "main": "lib/web-client.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "registry": "http://registry.npm.taobao.org/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mugglecloud/web.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/mugglecloud/web/issues"
+  }
+}
