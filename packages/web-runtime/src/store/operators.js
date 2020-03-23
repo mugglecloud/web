@@ -1,5 +1,5 @@
 import { mutate, map, pipe, catchError, debounce, run } from "overmind";
-import objectPath from "object-path";
+// import objectPath from "object-path";
 
 export const addAuthHeader = map(({ state }, options) => {
   if (state.token)

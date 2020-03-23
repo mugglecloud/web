@@ -1,8 +1,8 @@
-import React from "react";
-import { OvermindProvider } from "runtime/hooks";
-import store from "runtime/store";
+import React, { useEffect } from "react";
+import { Provider as OvermindProvider } from "overmind-react";
+import store from "../store";
 import { BrowserRouter as Router } from "react-router-dom";
-import { useOvermind } from "runtime/hooks";
+import { useOvermind } from "../hooks";
 
 if (process.env.NODE_ENV === "development") {
   // disable proxy state tree devmode to pass track mutation
@@ -11,29 +11,41 @@ if (process.env.NODE_ENV === "development") {
 }
 
 function RenderRest(props) {
-  const { state } = useOvermind();
+  const {
+    state: { config }
+  } = useOvermind();
 
-  if (!state.runtimeDepsLoaded) return <div>loading ...</div>;
+  if (!config.runtime_deps) return null;
 
-  return (props.providers || state.config.providers || []).reduce(
+  return (config.providers || []).reduce(
     (pre, cur) => {
       return React.cloneElement(cur.element, cur.props, pre);
     },
     <>
-      {props.initializer}
+      {config.initializer}
       {props.children}
     </>
   );
 }
 
-export default ({ children, providers = null, initializer = null }) => {
+const Runtime = ({ children }) => {
   return (
     <OvermindProvider value={store}>
       <Router>
-        <RenderRest providers={providers} initializer={initializer}>
-          {children}
-        </RenderRest>
+        <RenderRest>{children}</RenderRest>
       </Router>
     </OvermindProvider>
   );
 };
+
+export const RuntimeProvider = ({ config = {}, children }) => {
+  const { actions } = useOvermind();
+
+  useEffect(() => {
+    actions.setConfig(config);
+  }, []);
+
+  return <Runtime>{children}</Runtime>;
+};
+
+export default Runtime;

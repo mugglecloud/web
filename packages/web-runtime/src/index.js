@@ -1,55 +1,64 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect } from "react";
+import React from "react";
 import ReactDOM from "react-dom";
-import * as serviceWorker from "./serviceWorker";
 import App from "./containers/App";
-import Runtime from "./containers/Runtime";
-import { useOvermind } from "./hooks";
+import { RuntimeProvider } from "./containers/Runtime";
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
 
-const LoadConfig = () => {
-  const { actions } = useOvermind();
+export { useOvermind, useStore, bindScope } from "./hooks";
+export { RuntimeProvider } from "./containers/Runtime";
 
-  useEffect(() => {
-    actions.getConfig();
-  }, []);
-  return null;
-};
+/*
+  providers: Array<{
+    element: ReactElement,
+    props: ReactProps
+  }>
 
-export const RuntimeProvider = ({
-  providers = [],
-  initializer = null,
-  autoLoadConfig = true
-}) => {
-  const Initializer = () => (
-    <>
-      {initializer}
-      {autoLoadConfig && <LoadConfig />}
-    </>
-  );
+  initializer: ReactElement,
 
-  return (
-    <Runtime providers={providers} initializer={<Initializer />}>
-      <App />
-    </Runtime>
-  );
-};
+  routes: Array<{
+    path: string,
+    exact: boolean,
+    need_auth: boolean,
+    ui_components: Array<{
+      name,
+      props,
+      component | source,
+    }>
+  }>
+
+  pages: {
+    auth: ReactElement,
+    redirect: ReactElement,
+    nomatch: ReactElement
+  }
+
+  runtime_deps: Array<{
+    name,
+    url
+  }>
+*/
 
 export default function render(
-  providers = [],
-  initializer = null,
-  autoLoadConfig = true
+  config = {
+    providers: [],
+    initializer: null,
+    routes: [],
+    pages: {
+      auth: null,
+      redirect: null,
+      nomatch: null
+    },
+    runtime_deps: []
+  }
 ) {
   ReactDOM.render(
-    <RuntimeProvider
-      providers={providers}
-      initializer={initializer}
-      autoLoadConfig={autoLoadConfig}
-    />,
+    <RuntimeProvider config={config}>
+      <App />
+    </RuntimeProvider>,
     document.getElementById("root")
   );
 }

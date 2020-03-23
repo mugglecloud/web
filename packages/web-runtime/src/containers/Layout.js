@@ -1,13 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { memo, useMemo } from "react";
-import { useOvermind, StoreScope, ScopeContext } from "runtime/hooks/overmind";
 import { Switch, Route, Redirect } from "react-router-dom";
 import { json, mutate } from "overmind";
 import { IS_OPERATOR } from "overmind/es/utils";
 
+import { useOvermind, StoreScope, ScopeContext } from "../hooks";
 import store from "../store";
-import { installPlugin } from "runtime/base/runtime";
-import { getScopeId } from "runtime/base/utils";
+import { installPlugin } from "../base/runtime";
+import { getScopeId } from "../base/utils";
 
 // const pages = { Home, CodeList, Board, SchemaForm };
 const INSTALLED_MODULE_CACHE = new Map();
@@ -95,75 +95,32 @@ function renderUi(ui) {
 function Routes({ routes, pages = {} }) {
   const { state } = useOvermind();
 
-  let noMatch = (
-    <Route>
-      <div>Not Found</div>
-    </Route>
-  );
-  let authPage = (
-    <Route>
-      <div>Authorization Is Required</div>
-    </Route>
-  );
-
-  let redirectPage = null;
-  let notNeedAuth = [];
-  let needAuth = [];
-
-  routes.forEach(route => {
-    if (route.redirect) {
-      redirectPage = (
-        <Redirect
-          key={`redirect:${Math.random()}:${route.redirect}`}
-          to={route.redirect}
-          exact
-        />
-      );
-
-      return null;
-    }
-
+  const routeComponents = routes.map(route => {
     if (!route.ui_components || !route.ui_components.length) {
       console.warn("ui is required", route.ui_components);
       return null;
     }
 
-    const C = route.ui_components.map(ui => {
+    const component = route.ui_components.map(ui => {
       const OC = renderUi(ui);
-      return OC && <OC key={ui.name} initialProps={ui.initialProps} />;
+      return OC && <OC key={ui.name} initialProps={ui.props} />;
     });
-    const RR = <Route>{C}</Route>;
-
-    if (route.authpage) {
-      authPage = RR;
-      return null;
-    }
-
-    if (route.nomatch) {
-      noMatch = RR;
-      return null;
-    }
 
     const path = route.path;
     const exact = route.exact == null ? path === "/" || !path : route.exact;
 
-    // console.log(path, exact);
-
-    const R = (
+    return (
       <Route key={path} path={path} exact={exact}>
-        {C}
+        {!route.need_auth || state.token ? component : pages.auth}
       </Route>
     );
-    route.auth ? needAuth.push(R) : notNeedAuth.push(R);
   });
 
   return (
     <Switch>
-      {React.Children.map(notNeedAuth, React.cloneElement)}
-      {!state.token && React.cloneElement(authPage)}
-      {React.Children.map(needAuth, React.cloneElement)}
-      {redirectPage && React.cloneElement(redirectPage)}
-      {noMatch && React.cloneElement(noMatch)}
+      {routeComponents}
+      {pages.redirect}
+      {pages.nomatch}
     </Switch>
   );
 }
