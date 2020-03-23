@@ -1,5 +1,5 @@
 import pathToRegexp from "path-to-regexp";
-import { useI18n } from "runtime/hooks/i18n";
+import { useI18n } from "../hooks/i18n";
 
 export function getTitle() {
   // eslint-disable-next-line react-hooks/rules-of-hooks

@@ -1,4 +1,4 @@
-import { OvermindProvider } from "runtime/hooks";
+import { OvermindProvider } from "../hooks";
 import store from "store";
 
 import { LocaleProvider } from "antd-mobile";

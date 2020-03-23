@@ -1,5 +1,5 @@
 import { pipe, map, mutate } from "overmind";
-import * as o from "runtime/store/operators";
+import * as o from "../../operators";
 import * as internal from "./internal";
 
 export const restSearch = pipe(

@@ -1,5 +1,5 @@
 node_modules
-/*.log
+*.log
 *.error
 /packages/*/lib/**
 !/packages/*/lib/.gitkeep

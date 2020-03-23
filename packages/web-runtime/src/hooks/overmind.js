@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from "react";
 import { createHook } from "overmind-react";
-import store from "runtime/store";
+import store from "../store";
 import { useContext } from "react";
-import { getScopeId } from "runtime/base/utils";
+import { getScopeId } from "../base/utils";
 
 export { Provider as OvermindProvider } from "overmind-react";
 
