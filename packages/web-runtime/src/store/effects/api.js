@@ -1,4 +1,3 @@
-import _ from "lodash-es";
 import http from "./http";
 
 function getUrl(collection) {
@@ -17,8 +16,9 @@ export const get = async (collection, id) => {
   return r.data;
 };
 
-export const findOne = async (collection, options) => {
-  let r = await find(collection, _.merge({ params: { _limit: 1 } }, options));
+export const findOne = async (collection, { params, ...options }) => {
+  if (!params._limit) params._limit = 1;
+  let r = await find(collection, { params, ...options });
   return r[0];
 };
 

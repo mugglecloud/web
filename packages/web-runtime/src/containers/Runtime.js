@@ -1,8 +1,7 @@
 import React, { useEffect } from "react";
-import { Provider as OvermindProvider } from "overmind-react";
 import store from "../store";
 import { BrowserRouter as Router } from "react-router-dom";
-import { useOvermind } from "../hooks";
+import { useOvermind, OvermindProvider } from "../hooks";
 
 if (process.env.NODE_ENV === "development") {
   // disable proxy state tree devmode to pass track mutation
@@ -12,10 +11,15 @@ if (process.env.NODE_ENV === "development") {
 
 function RenderRest(props) {
   const {
-    state: { config }
+    state: { config },
+    actions
   } = useOvermind();
 
-  if (!config.runtime_deps) return null;
+  useEffect(() => {
+    actions.setConfig(props.config);
+  }, []);
+
+  if (!config || !config.runtime_deps) return null;
 
   return (config.providers || []).reduce(
     (pre, cur) => {
@@ -28,24 +32,18 @@ function RenderRest(props) {
   );
 }
 
-const Runtime = ({ children }) => {
+const Runtime = ({ children, config }) => {
   return (
     <OvermindProvider value={store}>
       <Router>
-        <RenderRest>{children}</RenderRest>
+        <RenderRest config={config}>{children}</RenderRest>
       </Router>
     </OvermindProvider>
   );
 };
 
 export const RuntimeProvider = ({ config = {}, children }) => {
-  const { actions } = useOvermind();
-
-  useEffect(() => {
-    actions.setConfig(config);
-  }, []);
-
-  return <Runtime>{children}</Runtime>;
+  return <Runtime config={config}>{children}</Runtime>;
 };
 
 export default Runtime;

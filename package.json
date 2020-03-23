@@ -1,6 +1,10 @@
 {
   "name": "root",
   "private": true,
+  "scripts": {
+    "postinstall": "lerna bootstrap",
+    "start:web-client": "lerna run start --scope @mugglecloud/web-runtime --scope @mugglecloud/web-client --parallel"
+  },
   "devDependencies": {
     "lerna": "^3.16.4"
   }

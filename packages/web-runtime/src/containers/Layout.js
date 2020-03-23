@@ -102,6 +102,9 @@ function Routes({ routes, pages = {} }) {
     }
 
     const component = route.ui_components.map(ui => {
+      if (ui.component)
+        return React.cloneElement(ui.component, { key: ui.name });
+
       const OC = renderUi(ui);
       return OC && <OC key={ui.name} initialProps={ui.props} />;
     });
