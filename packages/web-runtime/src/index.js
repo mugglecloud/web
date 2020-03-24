@@ -23,6 +23,7 @@ export { RuntimeProvider } from "./containers/Runtime";
     path: string,
     exact: boolean,
     need_auth: boolean,
+    redirect: string,
     ui_components: Array<{
       name,
       props,
@@ -49,7 +50,6 @@ export default function render(
     routes: [],
     pages: {
       auth: null,
-      redirect: null,
       nomatch: null,
       loading: null
     },

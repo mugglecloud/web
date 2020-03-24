@@ -111,9 +111,17 @@ function Routes({ routes, pages = {} }) {
     const path = route.path;
     const exact = route.exact == null ? path === "/" || !path : route.exact;
 
+    const C = route.redirect ? (
+      <Redirect to={route.redirect} />
+    ) : !route.need_auth || state.token ? (
+      component
+    ) : (
+      pages.auth
+    );
+
     return (
       <Route key={path} path={path} exact={exact}>
-        {!route.need_auth || state.token ? component : pages.auth}
+        {C}
       </Route>
     );
   });
@@ -121,8 +129,7 @@ function Routes({ routes, pages = {} }) {
   return (
     <Switch>
       {routeComponents}
-      {pages.redirect}
-      {pages.nomatch}
+      <Route>{pages.nomatch}</Route>
     </Switch>
   );
 }
