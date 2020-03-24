@@ -10,12 +10,13 @@ const useStyles = makeStyles({
     left: 0,
     width: "100%",
     zIndex: 9999
-  },
-  navigation: {}
+  }
 });
 
 export default () => {
   const classes = useStyles();
+
+  console.log(classes.root);
 
   return (
     <header className={classes.root}>
