@@ -1,11 +1,11 @@
-import App from "pages/App/App";
+import intro from "pages/intro";
 
 const routes = [
   {
     path: "/",
     exact: true,
     need_auth: false,
-    ui_components: [{ name: "app", component: App }]
+    ui_components: [intro]
   }
 ];
 

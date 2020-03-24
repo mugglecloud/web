@@ -5,8 +5,10 @@ import * as serviceWorker from "./serviceWorker";
 
 import render from "@mugglecloud/web-runtime";
 import routes from "./config/routes";
+import style from "./config/style";
+import ui_components from "./config/ui_components";
 
-render({ routes });
+render({ routes, style, ui_components });
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

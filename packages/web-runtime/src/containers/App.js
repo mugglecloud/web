@@ -2,7 +2,7 @@
 import React from "react";
 import Layout from "./Layout";
 
-export default function App() {
+export default function App(props) {
   return (
     <div
       style={{

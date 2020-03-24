@@ -12,6 +12,7 @@ export { useOvermind, useStore, bindScope } from "./hooks";
 export { RuntimeProvider } from "./containers/Runtime";
 
 /*
+config: {
   providers: Array<{
     element: ReactElement,
     props: ReactProps
@@ -33,7 +34,7 @@ export { RuntimeProvider } from "./containers/Runtime";
 
   pages: {
     auth: ReactElement,
-    redirect: ReactElement,
+    redirect: string,
     nomatch: ReactElement
   }
 
@@ -41,10 +42,12 @@ export { RuntimeProvider } from "./containers/Runtime";
     name,
     url
   }>
+}
 */
 
 export default function render(
   config = {
+    style: {},
     providers: [],
     initializer: null,
     routes: [],
@@ -53,7 +56,8 @@ export default function render(
       nomatch: null,
       loading: null
     },
-    runtime_deps: []
+    runtime_deps: [],
+    ui_components: null
   }
 ) {
   ReactDOM.render(

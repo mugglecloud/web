@@ -1,7 +1,3 @@
-import { LocaleProvider } from "antd";
-
-const providers = [
-  { element: LocaleProvider, props: { locale: navigator.language } }
-];
+const providers = [];
 
 export default providers;

@@ -30,7 +30,7 @@
   "bugs": {
     "url": "https://github.com/mugglecloud/web/issues"
   },
-  "dependencies": {
+  "peerDependencies": {
     "axios": "^0.19.2",
     "overmind": "^23.0.1",
     "overmind-graphql": "^3.0.1",
