@@ -77,7 +77,6 @@ function renderUi(ui) {
   return memo(props => {
     const { actions } = useOvermind();
     useMemo(() => {
-      console.log("use memo", mod.name);
       actions[
         mod.name
       ].INTERNAL_INIT_FOR_INTERNAL_USE_ONLY_DO_NOT_USE_IT_ELSEWHERE(
