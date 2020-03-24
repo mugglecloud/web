@@ -131,15 +131,18 @@ function Routes({ routes, pages = {} }) {
 export default () => {
   const { state } = useOvermind();
 
-  if (!state.config.routes.length)
+  const { routes, pages } = state.config;
+
+  if (!routes.length)
     return (
       <div
         style={{
           justifyContent: "center",
-          padding: "30px"
+          alignItems: "center",
+          padding: "10px"
         }}
       >
-        loading ...
+        {pages.loading || "loading ..."}
       </div>
     );
 
@@ -150,7 +153,7 @@ export default () => {
         height: "100%"
       }}
     >
-      <Routes routes={state.config.routes} pages={state.config.pages} />
+      <Routes routes={routes} pages={pages} />
     </div>
   );
 };

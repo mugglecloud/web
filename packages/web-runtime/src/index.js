@@ -50,7 +50,8 @@ export default function render(
     pages: {
       auth: null,
       redirect: null,
-      nomatch: null
+      nomatch: null,
+      loading: null
     },
     runtime_deps: []
   }
