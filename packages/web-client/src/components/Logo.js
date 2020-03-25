@@ -1,11 +1,11 @@
 import React from "react";
-import SvgIcon from "@material-ui/core/SvgIcon";
 import { Link } from "@material-ui/core";
+import Svg from "components/Svg";
 
-export default () => {
+export default ({ className, svg, ...props }) => {
   return (
-    <Link>
-      <SvgIcon />
+    <Link className={className}>
+      <Svg src={svg} {...props} />
     </Link>
   );
 };

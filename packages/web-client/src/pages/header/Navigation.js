@@ -1,26 +1,35 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core";
+import { makeStyles, Typography, Link } from "@material-ui/core";
 
-import Logo from "components/Logo";
-
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   root: {
-    position: "fixed",
-    top: 0,
-    left: 0,
-    width: "100%",
-    zIndex: 9999
+    "& > * + *": {
+      marginLeft: theme.spacing(2)
+    },
+    textAlign: "center"
   }
-});
+}));
 
-export default () => {
+export default ({ className }) => {
   const classes = useStyles();
 
   console.log(classes.root);
 
+  const preventDefault = e => {
+    e.preventDefault();
+  };
+
   return (
-    <header className={classes.root}>
-      <Logo />
-    </header>
+    <Typography className={[classes.root, className].join(" ")}>
+      <Link href="#" onClick={preventDefault} color="inherit">
+        Link
+      </Link>
+      <Link href="#" onClick={preventDefault} color="inherit">
+        {'color="inherit"'}
+      </Link>
+      <Link href="#" onClick={preventDefault} color="inherit" variant="body2">
+        {'variant="body2"'}
+      </Link>
+    </Typography>
   );
 };
