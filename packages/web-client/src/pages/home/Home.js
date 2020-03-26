@@ -19,10 +19,10 @@ const useStyles = makeStyles(theme => ({
 
 const groups = [
   <Intro />,
-  <ImageVideo />
-  // <div>group 2</div>,
-  // <div>group 3</div>,
-  // <div>group 4</div>
+  <ImageVideo />,
+  <div>group 2</div>,
+  <div>group 3</div>,
+  <div>group 4</div>
 ];
 
 export default props => {
@@ -35,7 +35,7 @@ export default props => {
 
   return (
     <TransitionGroup enter exit className={classes.root}>
-      <Slide key={active} in direction="up">
+      <Slide key={active} direction="up">
         {groups[active]}
       </Slide>
     </TransitionGroup>

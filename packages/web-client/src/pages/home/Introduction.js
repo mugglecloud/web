@@ -20,7 +20,7 @@ export default props => {
   const handleClick = () => console.log("click intro");
 
   return (
-    <div className={classes.root} onClick={handleClick}>
+    <div {...props} className={classes.root} onClick={handleClick}>
       <BackgroundVideo sources={state.intro.sources} />
     </div>
   );
