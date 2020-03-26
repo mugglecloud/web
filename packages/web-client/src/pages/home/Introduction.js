@@ -8,19 +8,20 @@ const useStyles = makeStyles({
     width: "100%",
     height: "100%",
     boxSizing: "border-box",
-    padding: "12px",
-    backgroundColor: "#e6e6e6"
+    border: "12px solid #e6e6e6",
+    background: "#000"
   }
 });
 
-export default () => {
+export default props => {
   const classes = useStyles();
-
   const { state } = useStore();
 
+  const handleClick = () => console.log("click intro");
+
   return (
-    <div className={classes.root}>
-      <BackgroundVideo sources={state.sources} />
+    <div className={classes.root} onClick={handleClick}>
+      <BackgroundVideo sources={state.intro.sources} />
     </div>
   );
 };

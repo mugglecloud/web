@@ -4,17 +4,18 @@ import { makeStyles } from "@material-ui/core";
 // import "videojs-css";
 import "video.js/dist/video-js.css";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   video: {
     width: "100%",
     height: "100%",
+    opacity: 0.7,
     "& > video": {
       width: "inherit",
       height: "inherit",
       objectFit: "cover"
     }
   }
-});
+}));
 
 export default props => {
   const classes = useStyles();

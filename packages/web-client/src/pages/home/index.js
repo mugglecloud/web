@@ -1,8 +1,8 @@
-import Header from "./Header";
+import Home from "./Home";
 import * as namespace from "./namespace";
 
 export default {
-  name: "header",
-  component: Header,
+  name: "home",
+  component: Home,
   namespace
 };

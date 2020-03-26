@@ -66,8 +66,8 @@ const useStyles = makeStyles({
   })
 });
 
-export default ({ className, onToggle }) => {
-  const [toggle, setToggle] = useState(false);
+export default ({ className, onToggle, defaultValue }) => {
+  const [toggle, setToggle] = useState(defaultValue);
 
   const classes = useStyles({ backgroundColor: "#fff", toggle });
 
