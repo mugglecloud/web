@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useLayoutEffect } from "react";
+import React, { useState, useLayoutEffect } from "react";
 import { makeStyles } from "@material-ui/styles";
 
 const useStyles = makeStyles(theme => ({

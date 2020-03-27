@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core";
+import { makeStyles, Fade } from "@material-ui/core";
 
-import Fade from "components/Fade";
+// import Fade from "components/Fade";
 import Logo from "components/Logo";
 import Navigation from "./Navigation";
 import ToggleButton from "./ToggleButton";
 import MainMenu from "./MainMenu";
+import { useStore } from "@mugglecloud/web-runtime/lib/hooks/overmind";
 
 const useStyles = makeStyles({
   root: {
@@ -21,6 +22,8 @@ const useStyles = makeStyles({
     justifyContent: "center",
     alignItems: "center",
     cursor: "pointer",
+    transition: "transform .5s ease",
+    transform: "translateY(0)",
 
     "& > *": {
       zIndex: 10
@@ -49,12 +52,16 @@ export default () => {
   const classes = useStyles();
   const [toggle, setToggle] = useState(false);
 
+  const { state } = useStore();
+
   const handleToggleMenu = toggled => {
     setToggle(toggled);
   };
 
+  const style = state.show ? {} : { transform: "translateY(-100%)" };
+
   return (
-    <header className={classes.root}>
+    <header style={style} className={classes.root}>
       <Logo className={classes.logo} fill="white" svg="/logo.svg" />
       <Navigation className={classes.nav} in={!toggle} />
       <ToggleButton

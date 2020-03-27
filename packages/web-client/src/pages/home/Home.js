@@ -1,9 +1,8 @@
 import React from "react";
 import { TransitionGroup } from "react-transition-group";
-import { makeStyles } from "@material-ui/core";
+import { makeStyles, Slide } from "@material-ui/core";
 import { useOvermind } from "@mugglecloud/web-runtime";
 
-import Slide from "components/Slide";
 import Intro from "./Introduction";
 import ImageVideo from "./ImageVideo";
 
@@ -25,17 +24,19 @@ const groups = [
   <div>group 4</div>
 ];
 
-export default props => {
+export default () => {
   const classes = useStyles();
   const { state } = useOvermind();
 
-  const { active } = state.header;
-
-  console.log(active);
+  const { active, direction } = state.header;
 
   return (
-    <TransitionGroup enter exit className={classes.root}>
-      <Slide key={active} direction="up">
+    <TransitionGroup className={classes.root}>
+      <Slide
+        key={active}
+        timeout={{ enter: 800, exit: 0 }}
+        direction={direction}
+      >
         {groups[active]}
       </Slide>
     </TransitionGroup>

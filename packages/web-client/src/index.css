@@ -14,3 +14,31 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+@keyframes anim-effect-ivana-1 {
+  0% {
+    opacity: 0.5;
+    transform: scale(0.7);
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes anim-effect-ivana-2 {
+  0% {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.2);
+  }
+}

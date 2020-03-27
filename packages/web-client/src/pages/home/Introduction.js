@@ -13,15 +13,15 @@ const useStyles = makeStyles({
   }
 });
 
-export default props => {
+export default React.forwardRef((props, ref) => {
   const classes = useStyles();
   const { state } = useStore();
 
   const handleClick = () => console.log("click intro");
 
   return (
-    <div {...props} className={classes.root} onClick={handleClick}>
+    <div {...props} ref={ref} className={classes.root} onClick={handleClick}>
       <BackgroundVideo sources={state.intro.sources} />
     </div>
   );
-};
+});

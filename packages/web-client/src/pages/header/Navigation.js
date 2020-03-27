@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   makeStyles,
   withStyles,
@@ -22,7 +22,8 @@ const useStyles = makeStyles(theme => ({
     },
 
     "& > *": {
-      padding: `0 ${theme.spacing(3)}px`
+      padding: `0 ${theme.spacing(3)}px`,
+      fontSize: "15px"
     },
 
     "& a > *:last-child": {

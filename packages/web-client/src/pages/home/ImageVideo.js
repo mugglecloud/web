@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { useStore } from "@mugglecloud/web-runtime";
 import Background from "components/Background";
+import VideoPopup from "components/VideoPopup";
 
 const useStyles = makeStyles({
   root: {
@@ -11,17 +11,17 @@ const useStyles = makeStyles({
     background: "#000",
     transform: "matrix(1, 0, 0, 1, 0, 0)",
     overflow: "hidden"
-  }
+  },
+  video: {}
 });
 
-export default props => {
+export default React.forwardRef((props, ref) => {
   const classes = useStyles();
 
-  const handleClick = () => console.log("video popup");
-
   return (
-    <div {...props} className={classes.root} onClick={handleClick}>
+    <div {...props} ref={ref} className={classes.root}>
       <Background src="http://www.feedmusic.com/images/presentation-background.jpg" />
+      <VideoPopup className={classes.video} />
     </div>
   );
-};
+});
