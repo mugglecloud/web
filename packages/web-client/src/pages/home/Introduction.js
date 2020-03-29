@@ -2,6 +2,7 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import BackgroundVideo from "components/BackgroundVideo";
 import { useStore } from "@mugglecloud/web-runtime";
+import ParagraphList from "components/ParagraphList";
 
 const useStyles = makeStyles({
   root: {
@@ -22,6 +23,7 @@ export default React.forwardRef((props, ref) => {
   return (
     <div {...props} ref={ref} className={classes.root} onClick={handleClick}>
       <BackgroundVideo sources={state.intro.sources} />
+      <ParagraphList paragraphs={state.intro.paragraphs} />
     </div>
   );
 });
