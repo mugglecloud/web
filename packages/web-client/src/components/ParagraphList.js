@@ -7,10 +7,11 @@ const useStyles = makeStyles(theme => ({
   wrapper: {
     position: "relative",
     top: "50%",
-    height: "1.5em",
-    marginTop: "-1.5em",
+    height: "2em",
+    marginTop: "-2em",
     fontSize: "24px",
-    lineHeight: "1.5em",
+    lineHeight: "2em",
+    transform: "translate3d(0, -50 %, 0)",
 
     "& p": {
       position: "absolute",
@@ -24,7 +25,7 @@ const useStyles = makeStyles(theme => ({
 
 const ParagraphList = ({ paragraphs = [] }) => {
   const classes = useStyles();
-  let { count, sign } = useScroll();
+  let { count } = useScroll();
 
   console.log(count);
 
@@ -32,12 +33,15 @@ const ParagraphList = ({ paragraphs = [] }) => {
 
   count = Math.max(0, Math.min(count, len));
 
+  const scale = i => Math.pow(Math.abs(i - count), 2);
+
   return (
     <div className={classes.wrapper}>
       {paragraphs.map((text, i) => {
         const style = {
-          opacity: 1,
-          transform: `translateY(${(i - count) * 100}%)`
+          opacity: 1 - scale(i) / len,
+          transform: `translateY(${(i - count) * 60}px) scale(${1 -
+            scale(i) / len})`
         };
 
         return (
