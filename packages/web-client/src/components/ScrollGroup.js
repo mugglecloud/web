@@ -10,10 +10,6 @@ const useStyles = makeStyles(theme => ({
     padding: "0 5px",
     boxSizing: "border-box",
     overflow: "hidden"
-    // transition: "all 200ms ease-out",
-    // "& *": {
-    //   transition: "inherit"
-    // }
   }
 }));
 
