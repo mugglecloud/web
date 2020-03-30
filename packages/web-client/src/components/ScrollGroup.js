@@ -17,7 +17,16 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default ({ children, className, ...props }) => {
+export default ({
+  children,
+  className,
+  min = -Infinity,
+  max = Infinity,
+  onLow,
+  onHigh,
+  threshold = 10,
+  ...props
+}) => {
   const classes = useStyles();
   const [event, setEvent] = React.useState({ count: 0, sign: 1 });
   const [count, setCount] = React.useState(0);
@@ -25,6 +34,14 @@ export default ({ children, className, ...props }) => {
   const handleWheel = e => {
     const { deltaY } = e;
     const sign = Math.round(deltaY / Math.abs(deltaY));
+    if (count + sign < min) {
+      onLow && onLow({ count, sign });
+      return;
+    }
+    if (count + sign > max) {
+      onHigh && onHigh({ count, sign });
+      return;
+    }
 
     setCount(count + sign);
     setEvent({ sign, count: count + sign });
