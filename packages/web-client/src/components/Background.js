@@ -6,7 +6,7 @@ const useStyles = makeStyles(theme => ({
     width: "100%",
     height: "100%",
     transition: "transform 36s ease-out",
-    position: "relative",
+    position: "absolute",
     backgroundSize: "cover",
     backgroundPosition: "50% 50%",
     backgroundImage: `url(${props.backgroundImage})`,

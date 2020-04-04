@@ -1,12 +1,14 @@
 import React, { useState } from "react";
-import { makeStyles, Fade } from "@material-ui/core";
+import { makeStyles, Fade, Hidden } from "@material-ui/core";
+import { useStore } from "@mugglecloud/web-runtime";
 
 // import Fade from "components/Fade";
 import Logo from "components/Logo";
+import FlexPadding from "components/FlexPadding";
+
 import Navigation from "./Navigation";
 import ToggleButton from "./ToggleButton";
 import MainMenu from "./MainMenu";
-import { useStore } from "@mugglecloud/web-runtime/lib/hooks/overmind";
 
 const useStyles = makeStyles({
   root: {
@@ -63,7 +65,10 @@ export default () => {
   return (
     <header style={style} className={classes.root}>
       <Logo className={classes.logo} fill="white" svg="/logo.svg" />
-      <Navigation className={classes.nav} in={!toggle} />
+      <Hidden xsDown>
+        <Navigation className={classes.nav} in={!toggle} />
+      </Hidden>
+      <FlexPadding />
       <ToggleButton
         className={classes.toggle}
         deefaultValue={toggle}

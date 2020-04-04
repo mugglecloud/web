@@ -1,27 +1,32 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core";
+import { useOvermind } from "@mugglecloud/web-runtime";
+
 import Background from "components/Background";
 import VideoPopup from "components/VideoPopup";
+import ScrollGroup from "containers/ScrollGroup";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   root: {
-    width: "100%",
-    height: "100%",
-    boxSizing: "border-box",
-    background: "#000",
-    transform: "matrix(1, 0, 0, 1, 0, 0)",
-    overflow: "hidden"
+    background: theme.background
   },
-  video: {}
-});
+  video: {
+    maxWidth: "80%"
+  }
+}));
 
 export default React.forwardRef((props, ref) => {
   const classes = useStyles();
+  const { actions } = useOvermind();
 
   return (
-    <div {...props} ref={ref} className={classes.root}>
+    <ScrollGroup {...props} ref={ref} className={classes.root}>
       <Background src="http://www.feedmusic.com/images/presentation-background.jpg" />
-      <VideoPopup className={classes.video} />
-    </div>
+      <VideoPopup
+        className={classes.video}
+        value={100}
+        onFull={actions.header.setShow}
+      />
+    </ScrollGroup>
   );
 });

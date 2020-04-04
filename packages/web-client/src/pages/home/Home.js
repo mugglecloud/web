@@ -1,44 +1,69 @@
-import React from "react";
-import { TransitionGroup } from "react-transition-group";
-import { makeStyles, Slide } from "@material-ui/core";
+import React, { useEffect } from "react";
+import { makeStyles, createMuiTheme, ThemeProvider } from "@material-ui/core";
 import { useOvermind } from "@mugglecloud/web-runtime";
 
+import SwiperGroup from "components/SwiperGroup";
+
+import mod from "./index";
 import Intro from "./Introduction";
 import ImageVideo from "./ImageVideo";
+import CanvasImage from "./CanvasImage";
+import More from "./More";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(({ background, fontColor }) => ({
   root: {
     width: "100%",
     height: "100%",
-    background: "#000",
-    color: "#fff",
+    background,
+    color: fontColor,
     overflow: "hidden"
   }
 }));
 
-const groups = [
-  <Intro />,
-  <ImageVideo />,
-  <div>group 2</div>,
-  <div>group 3</div>,
-  <div>group 4</div>
-];
-
-export default () => {
+const Home = () => {
   const classes = useStyles();
-  const { state } = useOvermind();
+  const {
+    state: {
+      header: { active }
+    },
+    actions: {
+      header: { setScope }
+    }
+  } = useOvermind();
 
-  const { active, direction } = state.header;
+  useEffect(() => {
+    setScope(mod.name);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
-    <TransitionGroup className={classes.root}>
-      <Slide
-        key={active}
-        timeout={{ enter: 800, exit: 0 }}
-        direction={direction}
-      >
-        {groups[active]}
-      </Slide>
-    </TransitionGroup>
+    <>
+      <SwiperGroup className={classes.root} active={active} duration={800}>
+        <Intro />
+        <ImageVideo />
+        <CanvasImage />
+        <ImageVideo />
+        <More />
+      </SwiperGroup>
+    </>
+  );
+};
+
+const theme = createMuiTheme({
+  background: "#000",
+  // background: "#e6e6e6",
+  fontColor: "#fff",
+  borderColor: "#e6e6e6",
+  color: "#320d7f",
+  hoverColor: "#fff",
+  hoverBackground: "#320d7f",
+  border: "12px solid #e6e6e6"
+});
+
+export default props => {
+  return (
+    <ThemeProvider theme={theme}>
+      <Home />
+    </ThemeProvider>
   );
 };

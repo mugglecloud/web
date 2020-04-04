@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React from "react";
+import React, { useContext } from "react";
+import { json } from "overmind";
 import { createHook } from "overmind-react";
 import store from "../store";
-import { useContext } from "react";
 import { getScopeId } from "../base/utils";
 
 export { Provider as OvermindProvider } from "overmind-react";
@@ -60,6 +60,8 @@ export const useStore = () => {
     actions: store.actions[name]
   };
 };
+
+export const useScope = () => useContext(StoreScope);
 
 export const bindScope = context => {
   const name = ScopeContext.get(getScopeId(context));

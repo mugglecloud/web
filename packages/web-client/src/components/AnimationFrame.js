@@ -11,15 +11,12 @@ export const updateFrame = (animation, duration) => {
   window.requestAnimationFrame(loop);
 };
 
-const AnimationFrame = ({ params = {}, deps = [] }, ref) => {
+const AnimationFrame = ({ params = {}, deps = [], targets }) => {
   let [prev, setPrev] = React.useState(null);
-  const current = ref && ref.current;
-  React.useEffect(() => {
-    if (!current) return;
 
-    if (!params.targets) {
-      params.targets = current.children;
-    }
+  React.useEffect(() => {
+    if (!targets) return;
+    params.targets = targets;
 
     if (prev) prev.stopped = true;
     params.autoplay = false;
@@ -28,9 +25,9 @@ const AnimationFrame = ({ params = {}, deps = [] }, ref) => {
     updateFrame(ani, params.duration || 1000);
     setPrev(ani);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [current, params, ...deps]);
+  }, [targets, params, ...deps]);
 
   return null;
 };
 
-export default React.forwardRef(AnimationFrame);
+export default AnimationFrame;

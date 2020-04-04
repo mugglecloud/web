@@ -1,4 +1,12 @@
 export const state = {
+  active: 0,
+  show: true,
+  navs: [
+    { text: "introduction", name: "intro", value: 0 },
+    { text: "the technology", name: "tech", value: 100 },
+    { text: "tech spotlight", name: "spotlight", value: 0 },
+    { text: "why muggle?", name: "muggle", value: 100 }
+  ],
   intro: {
     sources: [
       // {
@@ -38,6 +46,65 @@ export const state = {
       "大树恢复后",
       "两人用将近一年的时间",
       '才做好了高度酒蒸馏装置并且配置好了"解除石化”的溶液"'
+    ]
+  },
+  tech: {},
+  spotlight: {
+    size: 178,
+    start: 16,
+    breakpoints: [
+      // { start: 0, end: 5, backgroundColor: "#5DC396", text: "" },
+      // { start: 6, end: 10, backgroundColor: "#7C96D0", text: "" },
+      // { start: 11, end: 15, backgroundColor: "#4C37DD", text: "" },
+      {
+        start: 16,
+        end: 37,
+        backgroundColor: "#F63902",
+        text:
+          "Data is recorded in provenance: meaning your personal data asset is permanent, immutable, and continuously growing in size and value. Automate the discovery and exploration of causal and correlative relationships that structure your personal provenance graph. Control what others can see and what they can’t. Your provenance graph is a rich, living asset that will be forever treasured and alive for you and your heirs."
+      },
+      {
+        start: 38,
+        end: 61,
+        backgroundColor: "#FBEA01",
+        text:
+          "Feed’s intelligent agents are cognitively aware of the changes in state of people, places, events, objects, and states of affairs."
+      },
+      {
+        start: 62,
+        end: 94,
+        backgroundColor: "#52E5E6",
+        text:
+          "When you can see the origin of data, and you have real-time access to changes in the state of that data, you have the most powerful marketing effectiveness measurement on the planet."
+      },
+      {
+        start: 95,
+        end: 121,
+        backgroundColor: "#7444b6",
+        text:
+          "Which means real-time and real-state insight, which means higher ROI through verifiably improved economic effectiveness of online advertising and consumer services."
+      },
+      {
+        start: 122,
+        end: 149,
+        backgroundColor: "#3A6CF1",
+        text:
+          "Continuous, automatic, and progressively-perfecting discovery: the most powerful tool for discovering that next gig, relationship, customer, & opportunity."
+      },
+      {
+        start: 150,
+        end: 179,
+        backgroundColor: "#F63902",
+        text:
+          "Trust. Ownership. Discovery. With Feed, everything that is yours, is now actually yours."
+      }
+    ]
+  },
+  about: {},
+  more: {
+    links: [
+      { path: "/more", title: "其他" },
+      { path: "/meeting", title: "留言" }
     ]
   }
 };

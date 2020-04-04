@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core";
 import { Transition } from "react-transition-group";
 
 import VideoPlayButton from "./VideoPlayButton";
-import { useOvermind } from "@mugglecloud/web-runtime/lib/hooks/overmind";
 import CloseButton from "./CloseButton";
 import Video from "./Video";
 
@@ -62,15 +61,9 @@ const enterTimeout = 1000;
 
 export default props => {
   const classes = useStyles();
-  const [full, setFull] = useState(false);
   const [visible, setVisible] = useState(true);
   const [videoPlay, setVideoPlay] = useState(false);
-
-  const { actions } = useOvermind();
-
-  useEffect(() => {
-    actions.header.setShow(!full);
-  }, [full, actions.header]);
+  const [full, setFull] = useState(props.full);
 
   const style = full
     ? {
@@ -87,6 +80,8 @@ export default props => {
       setVisible(!isFull);
       setVideoPlay(isFull);
     }, enterTimeout);
+
+    props.onFull && props.onFull(!isFull);
   };
 
   const videoOptions = {

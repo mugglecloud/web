@@ -1,18 +1,19 @@
 import React from "react";
 import { makeStyles } from "@material-ui/styles";
 
-import { useScroll } from "./ScrollGroup";
-import AnimationFrame from "./AnimationFrame";
+// import AnimationFrame from "./AnimationFrame";
 
 const useStyles = makeStyles(theme => ({
   wrapper: {
-    position: "relative",
+    position: "absolute",
+    width: "100%",
     top: "50%",
     height: "2em",
     marginTop: "-2em",
     fontSize: "24px",
     lineHeight: "2em",
-    transform: "translate3d(0, -50 %, 0)",
+    transform: "translate3d(0, -200%, 0)",
+    boxSizing: "border-box",
 
     "& p": {
       position: "absolute",
@@ -24,32 +25,30 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const ParagraphList = ({ paragraphs = [] }) => {
-  const ref = React.useRef();
+const ParagraphList = ({
+  paragraphs = [],
+  className,
+  count = 0,
+  duration = 800
+}) => {
   const classes = useStyles();
-  let { count } = useScroll();
-
-  const duration = 1000;
-
-  const params = React.useMemo(() => {
-    const scale = i => Math.pow(Math.abs(i - count), 2);
-    const sign = i => (i > count ? 1 : -1);
-
-    return {
-      targets: ref.current && ref.current.querySelectorAll("p"),
-      duration,
-      easing: "cubicBezier(0.110, 0.880, 0.505, 0.830)",
-      opacity: (el, i, l) => 1 - scale(i) / l,
-      translateY: (el, i, l) => (i - count) * 60,
-      scale: (el, i, l) => 1 - (sign(i) * scale(i)) / l
-    };
-  }, [ref, duration, count]);
 
   return (
-    <div ref={ref} className={classes.wrapper}>
-      <AnimationFrame ref={ref} params={params} />
+    <div className={[classes.wrapper, className].join(" ")}>
       {paragraphs.map((text, i) => {
-        return <p key={i}>{text}</p>;
+        const offset = Math.max(-4, Math.min(12, i - count));
+        const transform = offset * 100;
+        const scale = 1 - Math.pow(offset < 0 ? offset / 4 : offset / 12, 3);
+        const opacity = 1 - Math.abs(offset < 0 ? offset / 4 : offset / 12);
+        const style = {
+          opacity,
+          transform: `translateY(${transform}%) scale(${scale})`
+        };
+        return (
+          <p style={style} key={i}>
+            {text}
+          </p>
+        );
       })}
     </div>
   );
