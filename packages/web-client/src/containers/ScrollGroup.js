@@ -1,28 +1,23 @@
 import React, { useState } from "react";
-import { useOvermind } from "@mugglecloud/web-runtime";
-import ScrollGroup, { ScrollProvider } from "components/ScrollGroup";
+import ScrollGroup, { Scroll, ScrollProvider } from "components/ScrollGroup";
 
 export { useScroll } from "components/ScrollGroup";
 
-export default React.forwardRef(
-  ({ children, size, onScroll, onThreshold, ...rest }, ref) => {
-    const { actions, state } = useOvermind();
+const NormalGroup = React.forwardRef(
+  ({ children, size, value, onScroll, onThreshold, ...rest }, ref) => {
     const step = 100 / size;
 
-    let value = state.header.current ? state.header.current.value : 0;
     const [count, setCount] = useState(Math.round(value / step));
 
     const handleScroll = e => {
       setCount(e);
-      actions.header.setValue(e * step);
-
-      onScroll && onScroll(e);
+      onScroll && onScroll(e, e * step);
     };
 
     const handleThreshold = direction => {
-      actions.header.next(direction);
       onThreshold && onThreshold(direction);
     };
+
     return (
       <ScrollGroup
         {...rest}
@@ -37,3 +32,22 @@ export default React.forwardRef(
     );
   }
 );
+
+const SimpleScroll = React.forwardRef((props, ref) => {
+  return (
+    <Scroll onScroll={props.onThreshold} ref={ref}>
+      {props.children}
+    </Scroll>
+  );
+});
+
+export default React.forwardRef((props, ref) => {
+  if (!props.size)
+    return <SimpleScroll {...props}>{props.children}</SimpleScroll>;
+
+  return (
+    <NormalGroup {...props} ref={ref}>
+      {props.children}
+    </NormalGroup>
+  );
+});

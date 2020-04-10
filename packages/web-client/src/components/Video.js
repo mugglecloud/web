@@ -1,48 +1,45 @@
-import React, { useEffect, useRef } from "react";
-import videojs from "video.js";
+import React, { useRef, useLayoutEffect } from "react";
+// import videojs from "video.js";
 import { makeStyles } from "@material-ui/core";
-import "video.js/dist/video-js.min.css";
+// import "videojs-css";
+// import "video.js/dist/video-js.css";
 
 const useStyles = makeStyles(theme => ({
   video: {
     width: "100%",
     height: "100%",
-    "& > video": {
-      width: "inherit",
-      height: "inherit",
-      objectFit: "contain"
-    }
+    objectFit: "scale-down"
   }
 }));
 
-export default ({ video, ...props }) => {
+export default ({ className, sources, ...props }) => {
   const classes = useStyles();
   const ref = useRef();
 
-  const options = Object.assign(
-    {
-      autoplay: false,
-      controls: true,
-      loop: false,
-      liveui: true
-    },
-    video
-  );
+  const video = ref.current;
 
-  useEffect(() => {
-    let player = null;
-    if (ref.current) {
-      player = videojs(ref.current, options, () => {
-        console.log("onPlayerReady");
-      });
-    }
-    return () => player && player.dispose();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ref.current]);
+  useLayoutEffect(() => {
+    if (!video) return;
+    console.log("play");
+    video.play();
+    return () => {
+      video.pause();
+      console.log("pause");
+    };
+  }, [video]);
 
   return (
-    <div {...props} data-vjs-player>
-      <video ref={ref} className={classes.video}></video>
-    </div>
+    <video
+      controls
+      {...props}
+      className={[classes.video, className].join(" ")}
+      loop
+      muted
+      ref={ref}
+    >
+      {sources.map(({ src, type }, i) => (
+        <source key={`${src}-${type}-${i}`} src={src} type={type} />
+      ))}
+    </video>
   );
 };

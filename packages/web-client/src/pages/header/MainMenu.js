@@ -1,5 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core";
+import { useOvermind } from "@mugglecloud/web-runtime";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -15,14 +16,24 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default React.forwardRef(({ style, className }, ref) => {
-  const classes = useStyles();
+export default React.forwardRef(
+  ({ children, style, className, ...props }, ref) => {
+    const classes = useStyles();
+    const {
+      state: {
+        config: { routes }
+      }
+    } = useOvermind();
 
-  return (
-    <div
-      ref={ref}
-      style={style}
-      className={[classes.root, className].join(" ")}
-    ></div>
-  );
-});
+    return (
+      <div
+        {...props}
+        ref={ref}
+        style={style}
+        className={[classes.root, className].join(" ")}
+      >
+        {children}
+      </div>
+    );
+  }
+);

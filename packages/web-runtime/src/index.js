@@ -57,7 +57,8 @@ export default function render(
       loading: null
     },
     runtime_deps: [],
-    ui_components: null
+    ui_components: null,
+    namespaces: null
   }
 ) {
   ReactDOM.render(

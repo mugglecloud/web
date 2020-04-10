@@ -3,12 +3,13 @@ import React from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import { json } from "overmind";
 
+import store from "../store";
 import { useOvermind } from "../hooks";
 import { renderUi } from "../base/utils";
 
 function renderComponents(ui_components) {
   return ui_components.map(ui => {
-    const OC = renderUi(ui);
+    const OC = renderUi(ui, store);
     return OC && <OC key={ui.name} initialProps={ui.props} />;
   });
 }

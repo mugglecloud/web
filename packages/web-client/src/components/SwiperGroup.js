@@ -1,12 +1,13 @@
 import React, { useMemo, createContext, useContext } from "react";
 import { makeStyles } from "@material-ui/core";
+import { withWheel, useWheel } from "./Wheel";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     position: "relative",
     "& > *:first-child": {
-      transform: "translate3d(0, 0, 0)"
-    }
+      transform: "translate3d(0, 0, 0)",
+    },
   },
   swiper: {
     position: "absolute",
@@ -16,106 +17,69 @@ const useStyles = makeStyles(theme => ({
     height: "100%",
     "& > *": {
       width: "inherit",
-      height: "inherit"
-    }
-  }
+      height: "inherit",
+    },
+  },
 }));
 
 const SwiperContext = createContext();
 
 export const useSwiper = () => useContext(SwiperContext);
 
-const Swiper = React.forwardRef(
-  ({ children, direction, duration, ...props }, ref) => {
-    const classes = useStyles();
+const Swiper = React.forwardRef(({ children, style }, ref) => {
+  const classes = useStyles();
 
-    const handleTransitionEnd = e => {
-      console.log("transition end", direction);
-    };
-
-    const defaultStyle = useMemo(
-      () => ({
-        transition: `all ${duration}ms ease-out`,
-        transform: "translateY(100%)"
-      }),
-      [duration]
-    );
-
-    const transitionStyle = { transform: `translateY(${direction * -100}%)` };
-    const isActive = direction === 0;
-
-    return (
-      <SwiperContext.Provider value={{ direction }}>
-        <div
-          {...props}
-          ref={ref}
-          className={classes.swiper}
-          onTransitionEnd={handleTransitionEnd}
-          style={{
-            ...defaultStyle,
-            ...transitionStyle,
-            ...{ visibility: isActive ? "visible" : "hidden" }
-          }}
-        >
-          {children}
-        </div>
-      </SwiperContext.Provider>
-    );
-  }
-);
-const SwiperGroup = ({ children, className, active = 0, duration = 800 }) => {
-  const groupId = useMemo(
-    () =>
-      Math.random()
-        .toString()
-        .substr(3, 4),
+  const defaultStyle = useMemo(
+    () => ({
+      transform: "translateY(100%)",
+    }),
     []
   );
-  const classes = useStyles();
-  const prev = useMemo(() => ({ value: 0, element: null }), []);
 
-  active = active < 0 ? 0 : active;
-
-  const swipers = useMemo(
-    () =>
-      React.Children.map(children, (c, i) => {
-        return (
-          <Swiper key={`swiper-group-${groupId}-${i}`} duration={duration}>
-            {React.cloneElement(c)}
-          </Swiper>
-        );
-      }),
-    [children, groupId, duration]
+  return (
+    <div
+      ref={ref}
+      className={classes.swiper}
+      style={{
+        ...defaultStyle,
+        ...style,
+      }}
+    >
+      {children}
+    </div>
   );
+});
 
-  const direction = Math.min(1, Math.max(-1, active - prev.value));
+const SwiperGroup = ({ children, className, active = 0, duration = 800 }) => {
+  const groupId = useMemo(() => Math.random().toString().substr(3, 4), []);
 
-  const handleTransitionEnd = () => {
-    prev.element = activeElement;
-    prev.value = active;
-    console.log(prev);
-  };
-
-  const prevElement =
-    prev.element &&
-    React.cloneElement(prev.element, {
-      direction
-    });
-
-  const activeElement = React.cloneElement(swipers[active], {
-    direction: 0,
-    onTransitionEnd: handleTransitionEnd
-  });
-
-  console.log(groupId, activeElement, prevElement);
+  const classes = useStyles();
+  active = active < 0 ? 0 : active;
 
   return (
     <div className={[classes.root, className].join(" ")}>
-      {direction > 0 ? prevElement : null}
-      {activeElement}
-      {direction < 0 ? prevElement : null}
+      {React.Children.map(children, (c, i) => {
+        const direction = Math.min(1, Math.max(-1, active - i));
+        const isActive = direction === 0;
+        const transitionStyle = {
+          transition: `all ${duration}ms ease-out`,
+          transform: `translateY(${direction * -100}%)`,
+          visibility: isActive ? "visible" : "hidden",
+        };
+
+        return (
+          <SwiperContext.Provider value={{ direction }}>
+            <Swiper
+              key={`swiper-group-${groupId}-${i}`}
+              style={transitionStyle}
+            >
+              {c}
+            </Swiper>
+          </SwiperContext.Provider>
+        );
+      })}
     </div>
   );
 };
 
-export default SwiperGroup;
+export default withWheel(SwiperGroup);

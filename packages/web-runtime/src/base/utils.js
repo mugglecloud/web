@@ -2,12 +2,11 @@ import React, { memo, useMemo } from "react";
 import { json, mutate } from "overmind";
 import { IS_OPERATOR } from "overmind/es/utils";
 
-import store from "../store";
 import { useOvermind, StoreScope, ScopeContext } from "../hooks";
 
 import { installPlugin } from "./runtime";
 
-export const getScopeId = context => {
+export const getScopeId = (context) => {
   const { actionName, actionId, operatorId } = context.execution;
   return `${actionName}:${actionId}:${operatorId}`;
 };
@@ -33,7 +32,24 @@ function scopeActions(name, actions) {
   return modActions;
 }
 
-const installModule = mod => {
+function mergeNamespace(store, ns, name) {
+  const { state, actions, effects } = store;
+
+  state[name] = store.getState(ns);
+  actions[name] = store.getActions(scopeActions(name, ns.actions));
+  effects[name] = ns.effects;
+}
+
+// export const mergeNamespaces = (store, namespaces = {}) => {
+//   console.log(namespaces);
+//   for (let k in namespaces) {
+//     const ns = namespaces[k];
+//     console.log(ns);
+//     mergeNamespace(store, ns, k);
+//   }
+// };
+
+export const installModule = (store, mod) => {
   const { state, actions, effects } = store;
   const ns = mod.namespace;
   const name = mod.name;
@@ -48,9 +64,10 @@ const installModule = mod => {
     Object.assign(overmindInstance.state[name], json(initialProps));
   };
 
-  state[name] = store.getState(ns);
-  actions[name] = store.getActions(scopeActions(name, ns.actions));
-  effects[name] = ns.effects;
+  // state[name] = store.getState(ns);
+  // actions[name] = store.getActions(scopeActions(name, ns.actions));
+  // effects[name] = ns.effects;
+  mergeNamespace(store, ns, name);
 
   if (ns.onInitialize) {
     const onInitialize = store.createAction(
@@ -63,7 +80,7 @@ const installModule = mod => {
   return name;
 };
 
-export function renderUi(ui) {
+export function renderUi(ui, store) {
   let mod = ui.component ? ui : installPlugin(ui.name, ui.source);
 
   mod = mod && (mod.default || mod);
@@ -72,10 +89,10 @@ export function renderUi(ui) {
   }
 
   if (!INSTALLED_MODULE_CACHE.has(ui.name)) {
-    INSTALLED_MODULE_CACHE.set(ui.name, installModule(mod));
+    INSTALLED_MODULE_CACHE.set(ui.name, installModule(store, mod));
   }
 
-  return memo(props => {
+  return memo((props) => {
     const { actions } = useOvermind();
     useMemo(() => {
       actions[

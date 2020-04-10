@@ -6,7 +6,7 @@ const routes = [
     exact: true,
     need_auth: false,
     ui_components: [home],
-    title: ""
+    title: "Introduction"
   }
 ];
 

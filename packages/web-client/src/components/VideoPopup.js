@@ -6,7 +6,7 @@ import VideoPlayButton from "./VideoPlayButton";
 import CloseButton from "./CloseButton";
 import Video from "./Video";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     position: "absolute",
     left: "50%",
@@ -18,12 +18,12 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: "rgba(0,0,0,.4)",
     boxSizing: "border-box",
     transition: `opacity 1s ease-in-out, transform 1s ease-in, all .6s ease-in`,
-    opacity: 1
+    opacity: 1,
   },
   wrapper: {
     opacity: 1,
     position: "relative",
-    overflow: "hidden"
+    overflow: "hidden",
   },
   content: {
     display: "flex",
@@ -36,8 +36,8 @@ const useStyles = makeStyles(theme => ({
 
     "& > p": {
       transform: "matrix(1, 0, 0, 1, 0, 0)",
-      margin: "0"
-    }
+      margin: "0",
+    },
   },
   overlay: {
     position: "fixed",
@@ -46,20 +46,20 @@ const useStyles = makeStyles(theme => ({
     width: "100%",
     height: "100%",
     opacity: 1,
-    backgroundColor: "#000"
-  }
+    backgroundColor: "#000",
+  },
 }));
 
 const transitionStyles = {
   entering: { opacity: 1, transform: "translate(-50%, -50%)" },
   entered: { opacity: 1, transform: "translate(-50%, -50%)" },
   exiting: { opacity: 0 },
-  exited: { opacity: 0 }
+  exited: { opacity: 0 },
 };
 
 const enterTimeout = 1000;
 
-export default props => {
+export default (props) => {
   const classes = useStyles();
   const [visible, setVisible] = useState(true);
   const [videoPlay, setVideoPlay] = useState(false);
@@ -68,11 +68,12 @@ export default props => {
   const style = full
     ? {
         width: "100%",
-        height: "100%"
+        height: "100%",
+        zIndex: "99",
       }
     : {};
 
-  const toggleFull = isFull => {
+  const toggleFull = (isFull) => {
     setFull(isFull);
     setVisible(false);
 
@@ -84,23 +85,13 @@ export default props => {
     props.onFull && props.onFull(!isFull);
   };
 
-  const videoOptions = {
-    autoplay: true,
-    sources: [
-      {
-        src: "http://www.feedmusic.com/videos/introducing-feed.mp4",
-        type: "video/mp4"
-      }
-    ]
-  };
-
   return (
     <Transition in appear enter timeout={{ enter: enterTimeout }}>
-      {state => (
+      {(state) => (
         <div
           style={{
             ...style,
-            ...transitionStyles[state]
+            ...transitionStyles[state],
           }}
           className={[classes.root, props.className].join(" ")}
         >
@@ -115,7 +106,7 @@ export default props => {
           {full && (
             <>
               <div className={classes.overlay}>
-                {videoPlay && <Video video={videoOptions} />}
+                {videoPlay && <Video sources={props.sources} autoPlay />}
               </div>
               <CloseButton onClick={() => toggleFull(false)} />
             </>

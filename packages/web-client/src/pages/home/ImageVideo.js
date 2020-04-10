@@ -1,31 +1,46 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core";
-import { useOvermind } from "@mugglecloud/web-runtime";
+import { makeStyles, useMediaQuery } from "@material-ui/core";
 
 import Background from "components/Background";
 import VideoPopup from "components/VideoPopup";
 import ScrollGroup from "containers/ScrollGroup";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
-    background: theme.background
+    background: theme.background,
   },
   video: {
-    maxWidth: "80%"
-  }
+    // maxWidth: "80%"
+  },
 }));
 
 export default React.forwardRef((props, ref) => {
   const classes = useStyles();
-  const { actions } = useOvermind();
+
+  const matches = useMediaQuery("(max-width:600px)");
+  console.log("render image video with matches", matches);
+
+  const sources = [
+    {
+      src:
+        "https://mugglecloud.github.io/oss/feedmusic.com/videos/introducing-feed.mp4",
+      type: "video/mp4",
+    },
+  ];
 
   return (
-    <ScrollGroup {...props} ref={ref} className={classes.root}>
-      <Background src="http://www.feedmusic.com/images/presentation-background.jpg" />
+    <ScrollGroup
+      {...props}
+      // onThreshold
+      ref={ref}
+      className={classes.root}
+    >
+      <Background src="https://mugglecloud.github.io/oss/feedmusic.com/images/presentation-background.jpg" />
       <VideoPopup
         className={classes.video}
         value={100}
-        onFull={actions.header.setShow}
+        // onFull={}
+        sources={sources}
       />
     </ScrollGroup>
   );

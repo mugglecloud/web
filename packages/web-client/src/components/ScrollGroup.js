@@ -1,25 +1,36 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect } from "react";
 import { makeStyles } from "@material-ui/core";
 
 const noop = () => {};
 const ScrollContext = React.createContext();
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
+    position: "absolute",
+    left: 0,
+    top: 0,
+    background: "transparent",
     width: "100%",
     height: "100%",
-    overflow: "hidden"
-  }
+    overflow: "hidden",
+  },
 }));
 
-const Scroll = React.forwardRef(
+export const Scroll = React.forwardRef(
   ({ children, className, onScroll, ...props }, ref) => {
     const classes = useStyles();
 
-    const handleWheel = e => {
+    console.log("render scroll");
+
+    const handleWheel = (e) => {
       const { deltaY } = e;
-      const direction = Math.round(deltaY / Math.abs(deltaY));
-      onScroll && onScroll(direction);
+
+      const next = () => {
+        const direction = Math.round(deltaY / Math.abs(deltaY));
+        onScroll && onScroll(direction);
+      };
+
+      next();
     };
 
     return (
@@ -51,7 +62,7 @@ const ScrollGroup = React.forwardRef(
     let count = useMemo(() => ({ value }), [value]);
     let force = 0;
 
-    const handleScroll = direction => {
+    const handleScroll = (direction) => {
       const c = count.value + direction;
       if (c > size || c < 0) {
         force += direction;
@@ -80,7 +91,7 @@ const ScrollGroup = React.forwardRef(
 
 export default ScrollGroup;
 
-export const ScrollProvider = props => (
+export const ScrollProvider = (props) => (
   <ScrollContext.Provider value={props.value}>
     {props.children}
   </ScrollContext.Provider>

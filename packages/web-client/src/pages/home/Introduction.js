@@ -3,8 +3,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import BackgroundVideo from "components/BackgroundVideo";
 import { useStore } from "@mugglecloud/web-runtime";
 
-import ParagraphList from "components/ParagraphList";
-import ScrollGroup, { useScroll } from "containers/ScrollGroup";
+import WheelParagraph from "./WheelParagraph";
+// import ScrollGroup, { useScroll } from "containers/ScrollGroup";
 
 const useStyles = makeStyles(({ background, border }) => ({
   root: {
@@ -12,32 +12,26 @@ const useStyles = makeStyles(({ background, border }) => ({
     width: "100%",
     height: "100%",
     border,
-    background
-  }
+    background,
+  },
 }));
-
-const WrappedParagraph = ({ paragraphs }) => {
-  const count = useScroll();
-
-  return <ParagraphList paragraphs={paragraphs} duration={300} count={count} />;
-};
 
 const Introduction = React.forwardRef((props, ref) => {
   const classes = useStyles();
   const {
     state: {
-      intro: { sources, paragraphs }
-    }
+      intro: { sources, paragraphs },
+    },
   } = useStore();
 
   const handleClick = () => console.log("click intro");
 
+  console.log("render instroduction");
+
   return (
     <div {...props} ref={ref} className={classes.root} onClick={handleClick}>
-      <BackgroundVideo sources={sources} />
-      <ScrollGroup threshold={5} size={paragraphs.length}>
-        <WrappedParagraph paragraphs={paragraphs} />
-      </ScrollGroup>
+      {/* <BackgroundVideo sources={sources} /> */}
+      <WheelParagraph paragraphs={paragraphs} />
     </div>
   );
 });

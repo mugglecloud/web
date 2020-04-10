@@ -1,21 +1,24 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   makeStyles,
   withStyles,
   Link,
   Grow,
-  LinearProgress
+  LinearProgress,
 } from "@material-ui/core";
-import { useStore } from "@mugglecloud/web-runtime";
+import { useOvermind } from "@mugglecloud/web-runtime";
 
 // import LinkBar from "components/LinkBar";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     textTransform: "uppercase",
+    margin: 0,
+    padding: 0,
+    listStyle: "none",
 
     "& > * + *": {
       // marginLeft: theme.spacing(3),
@@ -23,7 +26,7 @@ const useStyles = makeStyles(theme => ({
 
     "& > *": {
       padding: `0 ${theme.spacing(3)}px`,
-      fontSize: "15px"
+      fontSize: "15px",
     },
 
     "& a > *:last-child": {
@@ -31,56 +34,77 @@ const useStyles = makeStyles(theme => ({
       transition: "all ease 300ms",
       transform: "translateY(5px)",
       paddingTop: "1px",
-      marginTop: "3px"
+      marginTop: "3px",
     },
 
     "& a:hover, & a.active": {
       "& > *:last-child": {
         opacity: "1",
-        transform: "translateY(0)"
-      }
-    }
-  }
+        transform: "translateY(0)",
+      },
+    },
+  },
 }));
 
 const ColorLinearProgress = withStyles({
   colorPrimary: {
-    backgroundColor: "#b3b3b3"
+    backgroundColor: "#b3b3b3",
   },
   barColorPrimary: {
-    backgroundColor: "#fff"
-  }
+    backgroundColor: "#fff",
+  },
 })(LinearProgress);
 
-export default ({ className, in: inProp }) => {
-  const classes = useStyles();
-  const { state, actions } = useStore();
+const MemoizedProgress = (props) => {
+  const { state } = useOvermind();
+  const nav = state.header.navs[props.index];
 
-  const preventDefault = (e, active) => {
+  return <ColorLinearProgress variant="determinate" value={nav.value} />;
+};
+
+const MemoizedLink = (props) => {
+  const { state, actions } = useOvermind();
+
+  const preventDefault = (e) => {
     e.preventDefault();
-    actions.setActive(active);
+    actions.header.setActive(props.index);
   };
 
+  const isActive = props.index === state.header.active;
+
   return (
-    <div className={[classes.root, className].join(" ")}>
-      {state.navs.map((nav, i) => (
+    <Link
+      onClick={(e) => preventDefault(e)}
+      color="inherit"
+      underline="none"
+      className={isActive ? "active" : ""}
+    >
+      {props.text}
+      <MemoizedProgress index={props.index} />
+    </Link>
+  );
+};
+
+export default ({ className, ...props }) => {
+  const classes = useStyles();
+  const { state } = useOvermind();
+
+  const menuCollapsed = state.header.menuCollapsed;
+
+  return (
+    <ul {...props} className={[classes.root, className].join(" ")}>
+      {state.header.navs.map((nav, i) => (
         <Grow
           key={nav.name}
-          in={inProp}
-          style={{ transformOrigin: "0 0 0" }}
+          in={menuCollapsed}
+          // style={{ transformOrigin: "0 0 0" }}
           timeout={i * 500}
         >
-          <Link
-            onClick={e => preventDefault(e, i)}
-            color="inherit"
-            underline="none"
-            className={i === state.active ? "active" : ""}
-          >
-            {nav.text}
-            <ColorLinearProgress variant="determinate" value={nav.value} />
-          </Link>
+          <li>
+            <MemoizedLink text={nav.text} index={i} />
+          </li>
         </Grow>
       ))}
-    </div>
+    </ul>
   );
 };

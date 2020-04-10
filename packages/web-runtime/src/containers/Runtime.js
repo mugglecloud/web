@@ -1,7 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import store from "../store";
 import { BrowserRouter as Router } from "react-router-dom";
+import { json } from "overmind";
 import { useOvermind, OvermindProvider } from "../hooks";
+// import { mergeNamespaces } from "../base/utils";
 
 if (process.env.NODE_ENV === "development") {
   // disable proxy state tree devmode to pass track mutation
@@ -12,8 +14,13 @@ if (process.env.NODE_ENV === "development") {
 function RenderRest(props) {
   const {
     state: { config },
-    actions
+    actions,
   } = useOvermind();
+
+  // useMemo(() => {
+  //   console.log(props.config.namespaces);
+  //   mergeNamespaces(store, props.config.namespaces);
+  // }, []);
 
   useEffect(() => {
     actions.setConfig(props.config);
@@ -21,9 +28,9 @@ function RenderRest(props) {
 
   if (!config || !config.runtime_deps) return null;
 
-  return (config.providers || []).reduce(
+  return (json(config.providers) || []).reduce(
     (pre, cur) => {
-      return React.cloneElement(cur.element, cur.props, pre);
+      return React.cloneElement(cur.element, cur.props || null, pre);
     },
     <>
       {config.initializer}
@@ -35,9 +42,9 @@ function RenderRest(props) {
 const Runtime = ({ children, config }) => {
   return (
     <OvermindProvider value={store}>
-      <Router>
-        <RenderRest config={config}>{children}</RenderRest>
-      </Router>
+      <RenderRest config={config}>
+        <Router>{children}</Router>
+      </RenderRest>
     </OvermindProvider>
   );
 };

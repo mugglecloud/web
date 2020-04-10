@@ -21,21 +21,21 @@ const useStyles = makeStyles(({ border, color }) => ({
       height: "100%",
       left: 0,
       top: 0,
-      transition: "inherit"
-    }
+      transition: "inherit",
+    },
   },
   opened: {
     "& > *:first-child": {
-      transform: "translateX(0)"
+      transform: "translateX(0)",
     },
     "& > *:last-child": {
-      transform: "translateX(16%)"
-    }
+      transform: "translateX(16%)",
+    },
   },
   swiperContainer: {
     zIndex: 10,
     transform: "translateX(-100%)",
-    width: "33.33%"
+    width: "33.33%",
   },
   info: {
     position: "relative",
@@ -45,26 +45,27 @@ const useStyles = makeStyles(({ border, color }) => ({
       bottom: 0,
       padding: "50px",
       color,
-      fontSize: "20px"
-    }
+      fontSize: "20px",
+    },
   },
   divider: {
     marginTop: "36px",
     height: "5px",
-    backgroundColor: color
+    backgroundColor: color,
   },
   canvas: {
-    zIndex: 1
-  }
+    zIndex: 1,
+  },
 }));
 
-const CanvasInfo = ({ children, style, breakpoint, ...rest }) => {
+const CanvasInfo = ({ children, style, breakpoint, duration, ...rest }) => {
   const classes = useStyles();
   const { backgroundColor = "inherit", text } = breakpoint;
   const { direction } = useSwiper();
 
   const dividerStyle = {
-    transform: `translateX(${direction * 100}%)`
+    transition: `transform ${duration}ms ease-out`,
+    transform: `translateX(${direction * 100}%)`,
   };
 
   return (
@@ -81,35 +82,47 @@ const CanvasInfo = ({ children, style, breakpoint, ...rest }) => {
   );
 };
 
-const CanvasImageList = props => {
+const CanvasImageList = (props) => {
   const classes = useStyles();
   const count = useScroll();
   const {
     state: {
-      spotlight: { start, breakpoints }
-    }
+      spotlight: { start, breakpoints },
+    },
   } = useStore();
 
   // const bp = breakpoints.find(v => v.start <= count && count <= v.end);
-  const active = breakpoints.findIndex(v => v.start <= count && count <= v.end);
+  const active = breakpoints.findIndex(
+    (v) => v.start <= count && count <= v.end
+  );
   const opened = count > start;
 
-  const src = `http://feedmusic.com/images/frame-high/${count + 1}.jpg`;
+  const src = `https://mugglecloud.github.io/oss/feedmusic.com/images/frame-high/${
+    count + 1
+  }.jpg`;
 
   const classNames = [classes.root];
   if (opened) {
     classNames.push(classes.opened);
   }
 
+  const duration = 800;
+
   return (
     <div className={classNames.join(" ")}>
       <SwiperGroup
         className={classes.swiperContainer}
         active={active}
-        duration={800}
+        duration={duration}
       >
         {breakpoints.map((v, i) => {
-          return <CanvasInfo key={`ani-swiper-${i}`} breakpoint={v} />;
+          return (
+            <CanvasInfo
+              key={`ani-swiper-${i}`}
+              breakpoint={v}
+              duration={duration}
+            />
+          );
         })}
       </SwiperGroup>
 
@@ -121,12 +134,21 @@ const CanvasImageList = props => {
 export default React.forwardRef((props, ref) => {
   const {
     state: {
-      spotlight: { size }
-    }
+      spotlight: { size },
+    },
   } = useStore();
 
+  const handleScroll = (v) => {};
+
   return (
-    <ScrollGroup {...props} size={size} ref={ref}>
+    <ScrollGroup
+      {...props}
+      size={size}
+      // value={current.value}
+      onScroll={handleScroll}
+      // onThreshold={next}
+      ref={ref}
+    >
       <CanvasImageList />
     </ScrollGroup>
   );

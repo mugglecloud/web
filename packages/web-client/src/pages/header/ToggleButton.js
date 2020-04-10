@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, makeStyles } from "@material-ui/core";
+import { useOvermind } from "@mugglecloud/web-runtime";
 
 const barStyle = ({ top }) => ({
   transition: "all .3s cubic-bezier(.7,0,.3,1)",
@@ -10,26 +11,26 @@ const barStyle = ({ top }) => ({
   backgroundColor: "#fff",
   display: "block",
   content: '" "',
-  top
+  top,
 });
 
-const hoverStyle = toggle =>
+const hoverStyle = (toggle) =>
   toggle
     ? {
         "&:hover > *:before": {
-          transform: "translateY(0px)rotate(-55deg)"
+          transform: "translateY(0px)rotate(-55deg)",
         },
         "&:hover > *:after": {
-          transform: "translateY(0px)rotate(55deg)"
-        }
+          transform: "translateY(0px)rotate(55deg)",
+        },
       }
     : {
         "&:hover > *:before": {
-          transform: "translateY(-2px)rotate(0)"
+          transform: "translateY(-2px)rotate(0)",
         },
         "&:hover > *:after": {
-          transform: "translateY(2px)rotate(0)"
-        }
+          transform: "translateY(2px)rotate(0)",
+        },
       };
 
 const useStyles = makeStyles({
@@ -41,18 +42,15 @@ const useStyles = makeStyles({
 
     "& > *:before": {
       ...barStyle({ top: toggle ? "0" : "-10px" }),
-      transform: toggle ? "translateY(0)rotate(-45deg)" : "rotate(0)"
+      transform: toggle ? "translateY(0)rotate(-45deg)" : "rotate(0)",
     },
 
     "& > *:after": {
       ...barStyle({ top: toggle ? "0" : "10px" }),
       transform: toggle ? "translateY(0)rotate(45deg)" : "rotate(0)",
-      "&:hover": {
-        transform: "translateY(2px)rotate(0)"
-      }
     },
 
-    ...hoverStyle(toggle)
+    ...hoverStyle(toggle),
   }),
   lines: ({ toggle, backgroundColor }) => ({
     backgroundColor: toggle ? "transparent" : backgroundColor,
@@ -62,18 +60,19 @@ const useStyles = makeStyles({
     height: "4px",
     display: "block",
     top: "50%",
-    marginTop: "-2px"
-  })
+    marginTop: "-2px",
+  }),
 });
 
-export default ({ className, onToggle, defaultValue }) => {
-  const [toggle, setToggle] = useState(defaultValue);
-
-  const classes = useStyles({ backgroundColor: "#fff", toggle });
+export default ({ className }) => {
+  const { state, actions } = useOvermind();
+  const classes = useStyles({
+    backgroundColor: "#fff",
+    toggle: !state.header.menuCollapsed,
+  });
 
   const handleClick = () => {
-    setToggle(!toggle);
-    onToggle && onToggle(!toggle);
+    actions.header.toggleMenu();
   };
 
   return (
