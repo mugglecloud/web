@@ -1,4 +1,7 @@
 export const state = {
+  theme: {
+    color: "#fff",
+  },
   navs: [
     { text: "introduction", name: "intro", value: 0 },
     { text: "the technology", name: "tech", value: 100 },

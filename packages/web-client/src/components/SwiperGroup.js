@@ -1,5 +1,7 @@
 import React, { useMemo, createContext, useContext } from "react";
 import { makeStyles } from "@material-ui/core";
+import { Frame, Stack } from "framer";
+
 import { withWheel, useWheel } from "./Wheel";
 
 const useStyles = makeStyles((theme) => ({
@@ -37,16 +39,18 @@ const Swiper = React.forwardRef(({ children, style }, ref) => {
   );
 
   return (
-    <div
+    <Frame
+      width="100%"
+      height="100%"
       ref={ref}
-      className={classes.swiper}
-      style={{
-        ...defaultStyle,
-        ...style,
-      }}
+      // className={classes.swiper}
+      // style={{
+      //   ...defaultStyle,
+      //   ...style,
+      // }}
     >
       {children}
-    </div>
+    </Frame>
   );
 });
 
@@ -57,7 +61,11 @@ const SwiperGroup = ({ children, className, active = 0, duration = 800 }) => {
   active = active < 0 ? 0 : active;
 
   return (
-    <div className={[classes.root, className].join(" ")}>
+    <Stack
+      width="100%"
+      height="100%"
+      // className={[classes.root, className].join(" ")}
+    >
       {React.Children.map(children, (c, i) => {
         const direction = Math.min(1, Math.max(-1, active - i));
         const isActive = direction === 0;
@@ -71,14 +79,14 @@ const SwiperGroup = ({ children, className, active = 0, duration = 800 }) => {
           <SwiperContext.Provider value={{ direction }}>
             <Swiper
               key={`swiper-group-${groupId}-${i}`}
-              style={transitionStyle}
+              // style={transitionStyle}
             >
               {c}
             </Swiper>
           </SwiperContext.Provider>
         );
       })}
-    </div>
+    </Stack>
   );
 };
 

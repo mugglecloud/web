@@ -1,118 +1,84 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core";
-import { Transition } from "react-transition-group";
+import { Frame, Stack } from "framer";
 
 import VideoPlayButton from "./VideoPlayButton";
 import CloseButton from "./CloseButton";
 import Video from "./Video";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    position: "absolute",
-    left: "50%",
-    top: "50%",
-    transform: "translate(-50%, 50%) scale(1.5)",
-    width: "680px",
-    height: "300px",
-    border: "12px solid #35017F",
-    backgroundColor: "rgba(0,0,0,.4)",
-    boxSizing: "border-box",
-    transition: `opacity 1s ease-in-out, transform 1s ease-in, all .6s ease-in`,
+const variants = {
+  hidden: {
+    opacity: 0,
+    y: 300,
+    width: 656,
+    scale: 1.5,
+  },
+  visible: {
     opacity: 1,
+    y: 0,
+    width: 656,
+    height: 300,
+    scale: 1,
   },
-  wrapper: {
-    opacity: 1,
-    position: "relative",
-    overflow: "hidden",
-  },
-  content: {
-    display: "flex",
-    flexDirection: "column",
-    position: "relative",
-    padding: "63px 30px",
-    fontSize: "38px",
-    color: "#fff",
-    textAlign: "center",
-
-    "& > p": {
-      transform: "matrix(1, 0, 0, 1, 0, 0)",
-      margin: "0",
-    },
-  },
-  overlay: {
-    position: "fixed",
-    left: 0,
-    top: 0,
+  full: {
     width: "100%",
     height: "100%",
-    opacity: 1,
-    backgroundColor: "#000",
+    scale: 1,
   },
-}));
-
-const transitionStyles = {
-  entering: { opacity: 1, transform: "translate(-50%, -50%)" },
-  entered: { opacity: 1, transform: "translate(-50%, -50%)" },
-  exiting: { opacity: 0 },
-  exited: { opacity: 0 },
 };
 
-const enterTimeout = 1000;
+const duration = 0.8;
 
 export default (props) => {
-  const classes = useStyles();
-  const [visible, setVisible] = useState(true);
-  const [videoPlay, setVideoPlay] = useState(false);
-  const [full, setFull] = useState(props.full);
-
-  const style = full
-    ? {
-        width: "100%",
-        height: "100%",
-        zIndex: "99",
-      }
-    : {};
+  const [full, setFull] = useState(false);
 
   const toggleFull = (isFull) => {
     setFull(isFull);
-    setVisible(false);
-
-    setTimeout(() => {
-      setVisible(!isFull);
-      setVideoPlay(isFull);
-    }, enterTimeout);
 
     props.onFull && props.onFull(!isFull);
   };
 
   return (
-    <Transition in appear enter timeout={{ enter: enterTimeout }}>
-      {(state) => (
-        <div
-          style={{
-            ...style,
-            ...transitionStyles[state],
-          }}
-          className={[classes.root, props.className].join(" ")}
+    <Frame
+      variants={variants}
+      initial="hidden"
+      animate={!full ? "visible" : "full"}
+      transition={{ duration }}
+      center
+      border="12px solid #35017F"
+      backgroundColor="rgba(0,0,0,.4)"
+      style={{ maxWidth: "100%" }}
+    >
+      <Frame
+        visible={!full}
+        width="100%"
+        height="100%"
+        backgroundColor="transparent"
+      >
+        <Stack
+          distribution="center"
+          alignment="center"
+          direction="vertical"
+          width="inherit"
+          height="inherit"
         >
-          {visible && !full && (
-            <div className={classes.wrapper}>
-              <div className={classes.content}>
-                <VideoPlayButton onClick={() => toggleFull(true)} />
-                <p>Introducing Feed</p>
-              </div>
-            </div>
-          )}
-          {full && (
-            <>
-              <div className={classes.overlay}>
-                {videoPlay && <Video sources={props.sources} autoPlay />}
-              </div>
-              <CloseButton onClick={() => toggleFull(false)} />
-            </>
-          )}
-        </div>
-      )}
-    </Transition>
+          <Frame height="auto" width="auto" background="transparent">
+            <VideoPlayButton onClick={() => toggleFull(true)} />
+          </Frame>
+          <Frame
+            width="100%"
+            height="auto"
+            background="transparent"
+            style={{ fontSize: "38px" }}
+          >
+            Introducing Feed
+          </Frame>
+        </Stack>
+      </Frame>
+      <Frame visible={full} width="100%" height="100%" backgroundColor="#000">
+        <Video autoPlay sources={props.sources} play={props.play} />
+        <CloseButton onClick={() => toggleFull(false)} />
+      </Frame>
+    </Frame>
   );
 };

@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { makeStyles, useMediaQuery } from "@material-ui/core";
+import { Frame } from "framer";
+import { useOvermind } from "@mugglecloud/web-runtime";
 
-import Background from "components/Background";
 import VideoPopup from "components/VideoPopup";
-import ScrollGroup from "containers/ScrollGroup";
+import Background from "components/Background";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,6 +21,8 @@ export default React.forwardRef((props, ref) => {
   const matches = useMediaQuery("(max-width:600px)");
   console.log("render image video with matches", matches);
 
+  const { actions } = useOvermind();
+
   const sources = [
     {
       src:
@@ -28,20 +31,31 @@ export default React.forwardRef((props, ref) => {
     },
   ];
 
+  const handleFull = (v) => {
+    actions.header.setVisible(v);
+  };
+
+  useEffect(() => {
+    if (!props.isActive) actions.header.setVisible(true);
+  }, [props.isActive]);
+
   return (
-    <ScrollGroup
-      {...props}
-      // onThreshold
-      ref={ref}
-      className={classes.root}
-    >
+    <Frame width="100%" height="100%">
       <Background src="https://mugglecloud.github.io/oss/feedmusic.com/images/presentation-background.jpg" />
-      <VideoPopup
-        className={classes.video}
-        value={100}
-        // onFull={}
-        sources={sources}
-      />
-    </ScrollGroup>
+      <Frame
+        visible={props.isActive}
+        width="100%"
+        height="100%"
+        background="transparent"
+      >
+        <VideoPopup
+          className={classes.video}
+          value={100}
+          onFull={handleFull}
+          sources={sources}
+          play={props.isActive}
+        />
+      </Frame>
+    </Frame>
   );
 });
