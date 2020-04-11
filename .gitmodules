@@ -1,3 +1,6 @@
 [submodule "packages/framer"]
 	path = packages/framer
 	url = https://github.com/mugglecloud/framer.git
+[submodule "packages/web-runtime"]
+	path = packages/web-runtime
+	url = https://github.com/mugglecloud/web-runtime.git
