@@ -4,3 +4,6 @@
 [submodule "packages/web-runtime"]
 	path = packages/web-runtime
 	url = https://github.com/mugglecloud/web-runtime.git
+[submodule "packages/cordova-app"]
+	path = packages/cordova-app
+	url = https://github.com/mugglecloud/cordova-app.git
