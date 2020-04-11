@@ -1,0 +1,3 @@
+[submodule "packages/framer"]
+	path = packages/framer
+	url = https://github.com/mugglecloud/framer.git
