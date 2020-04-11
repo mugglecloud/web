@@ -12,5 +12,4 @@ export const state = {
 
   visible: true,
   menuCollapsed: true,
-  isNavigating: false,
 };

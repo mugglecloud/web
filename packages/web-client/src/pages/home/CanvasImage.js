@@ -1,29 +1,27 @@
 import React from "react";
 import { makeStyles, Divider } from "@material-ui/core";
 import { useStore } from "@mugglecloud/web-runtime";
+import { Scroll, Frame, Stack } from "framer";
 
-import ScrollGroup, { useScroll } from "containers/ScrollGroup";
 import Canvas from "components/Canvas";
-import SwiperGroup, { useSwiper } from "components/SwiperGroup";
+// import SwiperGroup, { useSwiper } from "components/SwiperGroup";
 
 const useStyles = makeStyles(({ border, color }) => ({
-  root: {
-    position: "relative",
-    width: "100%",
-    height: "100%",
-    overflow: "hidden",
-    transition: "all 800ms ease",
-    border,
+  // root: {
+  //   position: "relative",
+  //   overflow: "hidden",
+  //   transition: "all 800ms ease",
+  //   border,
 
-    "& > *": {
-      position: "absolute",
-      width: "100%",
-      height: "100%",
-      left: 0,
-      top: 0,
-      transition: "inherit",
-    },
-  },
+  //   "& > *": {
+  //     position: "absolute",
+  //     width: "100%",
+  //     height: "100%",
+  //     left: 0,
+  //     top: 0,
+  //     transition: "inherit",
+  //   },
+  // },
   opened: {
     "& > *:first-child": {
       transform: "translateX(0)",
@@ -35,7 +33,7 @@ const useStyles = makeStyles(({ border, color }) => ({
   swiperContainer: {
     zIndex: 10,
     transform: "translateX(-100%)",
-    width: "33.33%",
+    minWidth: "350px",
   },
   info: {
     position: "relative",
@@ -55,36 +53,39 @@ const useStyles = makeStyles(({ border, color }) => ({
   },
   canvas: {
     zIndex: 1,
+    width: "100%",
+    height: "100%",
   },
 }));
 
-const CanvasInfo = ({ children, style, breakpoint, duration, ...rest }) => {
+const CanvasInfo = ({ children, breakpoint, duration }) => {
   const classes = useStyles();
   const { backgroundColor = "inherit", text } = breakpoint;
-  const { direction } = useSwiper();
+  // const { direction } = useSwiper();
 
   const dividerStyle = {
     transition: `transform ${duration}ms ease-out`,
-    transform: `translateX(${direction * 100}%)`,
+    transform: `translateX(${1 * 100}%)`,
   };
 
   return (
-    <div
-      {...rest}
-      style={Object.assign({ backgroundColor }, style)}
+    <Frame
+      width="100%"
+      height="100%"
+      style={Object.assign({ backgroundColor })}
       className={classes.info}
     >
       <div>
         <p>{text}</p>
         <Divider style={dividerStyle} classes={{ root: classes.divider }} />
       </div>
-    </div>
+    </Frame>
   );
 };
 
 const CanvasImageList = (props) => {
   const classes = useStyles();
-  const count = useScroll();
+  const count = 0;
   const {
     state: {
       spotlight: { start, breakpoints },
@@ -109,11 +110,12 @@ const CanvasImageList = (props) => {
   const duration = 800;
 
   return (
-    <div className={classNames.join(" ")}>
-      <SwiperGroup
+    <Frame width="100%" height="100%">
+      <Stack
+        width="30%"
+        height="100%"
+        direction="vertical"
         className={classes.swiperContainer}
-        active={active}
-        duration={duration}
       >
         {breakpoints.map((v, i) => {
           return (
@@ -124,10 +126,11 @@ const CanvasImageList = (props) => {
             />
           );
         })}
-      </SwiperGroup>
-
-      <Canvas width="1280" height="720" src={src} className={classes.canvas} />
-    </div>
+      </Stack>
+      <Frame size="100%" className={classes.canvas}>
+        <Canvas src={src} />
+      </Frame>
+    </Frame>
   );
 };
 
@@ -141,15 +144,8 @@ export default React.forwardRef((props, ref) => {
   const handleScroll = (v) => {};
 
   return (
-    <ScrollGroup
-      {...props}
-      size={size}
-      // value={current.value}
-      onScroll={handleScroll}
-      // onThreshold={next}
-      ref={ref}
-    >
+    <Frame size="100%" onScroll={handleScroll}>
       <CanvasImageList />
-    </ScrollGroup>
+    </Frame>
   );
 });

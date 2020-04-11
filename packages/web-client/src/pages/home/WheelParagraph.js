@@ -12,7 +12,7 @@ const WheelParagraph = ({ paragraphs, threshold = 5 }) => {
   const handleWheel = ({ event, id }) => {
     const v = defaultOffset + event.deltaY;
     actions.header.setValue(v * step);
-    // console.log(id, event.deltaY, defaultOffset, v, v * step);
+    console.log(id, event.deltaY, defaultOffset, v, v * step);
     return false;
   };
 

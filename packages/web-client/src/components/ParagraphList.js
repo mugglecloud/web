@@ -9,9 +9,6 @@ import React, {
 import { makeStyles } from "@material-ui/styles";
 import anime from "animejs";
 
-import ScrollGroup from "./ScrollGroup";
-import { withWheel } from "./Wheel";
-
 const useStyles = makeStyles((theme) => ({
   wrapper: {
     position: "absolute",

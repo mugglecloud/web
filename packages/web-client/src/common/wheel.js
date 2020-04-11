@@ -14,6 +14,10 @@ const WheelTree = class {
     this.cache.set(id, item);
   }
 
+  remove(id) {
+    this.cache.delete(id);
+  }
+
   get leafs() {
     return Array.from(this.cache.values()).filter(
       (v) => !v.children || !v.children.size

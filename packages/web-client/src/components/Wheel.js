@@ -48,7 +48,7 @@ export const Wheel = (props) => {
 
     return () => {
       parent && parent.children.delete(id);
-      tree.delete(id);
+      tree.remove(id);
     };
   }, []);
 
