@@ -7,3 +7,6 @@
 [submodule "packages/cordova-app"]
 	path = packages/cordova-app
 	url = https://github.com/mugglecloud/cordova-app.git
+[submodule "packages/web-client"]
+	path = packages/web-client
+	url = https://github.com/mugglecloud/web-client.git
